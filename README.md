@@ -24,3 +24,9 @@ KHook:SendEmbed({
     color = 65280 -- Green color
 })
 ```
+#### Finish (Needed)
+```lua
+local success, result = pcall(function()
+    return http_request(requestData)
+end)
+```
