@@ -1,5 +1,3 @@
-local HttpService = game:GetService("HttpService")
-
 local KHook = {}
 
 -- Function to send a simple message to the webhook
@@ -9,17 +7,27 @@ function KHook:SendMessage(msg, username, webhookUrl)
         username = username
     }
 
-    local jsonData = HttpService:JSONEncode(data)
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
 
-    -- Send the request
-    local success, errorMessage = pcall(function()
-        HttpService:PostAsync(webhookUrl, jsonData, Enum.HttpContentType.ApplicationJson)
+    -- Request data structure
+    local requestData = {
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+        Body = jsonData
+    }
+
+    -- Send the request using JJSploit's request function
+    local success, result = pcall(function()
+        return request(requestData)
     end)
 
     if success then
         print("Message sent to webhook successfully!")
     else
-        warn("Failed to send message to webhook: " .. errorMessage)
+        warn("Failed to send message to webhook: " .. tostring(result))
     end
 end
 
@@ -28,7 +36,7 @@ function KHook:SendEmbed(params)
     local webhookUrl = params.webhookUrl
     local title = params.title or "No Title"
     local description = params.description or "No Description"
-    local color = params.color or 16777215 -- Default white
+    local color = params.color or 16777215 -- Default white color
 
     local embedData = {
         ["embeds"] = {
@@ -40,17 +48,27 @@ function KHook:SendEmbed(params)
         }
     }
 
-    local jsonData = HttpService:JSONEncode(embedData)
+    local jsonData = game:GetService("HttpService"):JSONEncode(embedData)
 
-    -- Send the request
-    local success, errorMessage = pcall(function()
-        HttpService:PostAsync(webhookUrl, jsonData, Enum.HttpContentType.ApplicationJson)
+    -- Request data structure
+    local requestData = {
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+        Body = jsonData
+    }
+
+    -- Send the request using JJSploit's request function
+    local success, result = pcall(function()
+        return request(requestData)
     end)
 
     if success then
         print("Embed message sent successfully!")
     else
-        warn("Failed to send embed message: " .. errorMessage)
+        warn("Failed to send embed message: " .. tostring(result))
     end
 end
 
